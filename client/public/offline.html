@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - Urban Harvest Hub</title>
+    <style>
+        body {
+            background-color: #050510;
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #39ff14;
+            /* Neon Green */
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #a0a0a0;
+            max-width: 80%;
+        }
+
+        .btn {
+            margin-top: 30px;
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid #00f3ff;
+            /* Neon Blue */
+            color: #00f3ff;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #00f3ff;
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>CONNECTION LOST</h1>
+    <p>You have disconnected from the Urban Harvest Network.</p>
+    <p>Please check your signal uplink.</p>
+    <a href="/" class="btn" onclick="window.location.reload()">RETRY CONNECTION</a>
+</body>
+
+</html>
