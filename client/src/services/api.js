@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
+console.log("URBAN HARVEST API URL:", API_URL); // Debugging log
 
 const api = axios.create({
     baseURL: API_URL,
