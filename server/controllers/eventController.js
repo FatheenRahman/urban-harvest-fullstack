@@ -3,6 +3,7 @@ const { eventSchema } = require('../utils/validation');
 
 exports.getAllEvents = async (req, res) => {
     try {
+        console.log("DB object (Event):", pool); // Verify DB object
         const { search, category, sort } = req.query;
         let query = 'SELECT * FROM events WHERE 1=1';
         const params = [];
@@ -22,7 +23,8 @@ exports.getAllEvents = async (req, res) => {
         const [events] = await pool.query(query, params);
         res.json(events);
     } catch (err) {
-        res.status(500).json({ error: 'Server error' });
+        console.error("❌ GET ALL EVENTS ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
 };
 
@@ -32,7 +34,8 @@ exports.getEventById = async (req, res) => {
         if (events.length === 0) return res.status(404).json({ error: 'Event not found' });
         res.json(events[0]);
     } catch (err) {
-        res.status(500).json({ error: 'Server error' });
+        console.error("❌ GET EVENT BY ID ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
 };
 
@@ -46,7 +49,8 @@ exports.createEvent = async (req, res) => {
 
         res.status(201).json({ id: result.insertId, ...req.body });
     } catch (err) {
-        res.status(500).json({ error: 'Server error' });
+        console.error("❌ CREATE EVENT ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
 };
 
@@ -61,7 +65,8 @@ exports.updateEvent = async (req, res) => {
         if (result.affectedRows === 0) return res.status(404).json({ error: 'Event not found' });
         res.json({ message: 'Event updated' });
     } catch (err) {
-        res.status(500).json({ error: 'Server error' });
+        console.error("❌ UPDATE EVENT ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
 };
 
@@ -71,7 +76,8 @@ exports.deleteEvent = async (req, res) => {
         if (result.affectedRows === 0) return res.status(404).json({ error: 'Event not found' });
         res.json({ message: 'Event deleted successfully' });
     } catch (err) {
-        res.status(500).json({ error: 'Server error' });
+        console.error("❌ DELETE EVENT ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
 };
 
@@ -93,7 +99,7 @@ exports.registerForEvent = async (req, res) => {
         await pool.query('INSERT INTO registrations (user_id, event_id, full_name, email, contact_number) VALUES (?, ?, ?, ?, ?)', [userId, eventId, fullName, email, contactNumber]);
         res.status(201).json({ message: 'Registered successfully' });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Server error' });
+        console.error("❌ REGISTER EVENT ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
 };

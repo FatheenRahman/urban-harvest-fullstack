@@ -3,6 +3,7 @@ const { productSchema } = require('../utils/validation');
 
 exports.getAllProducts = async (req, res) => {
     try {
+        console.log("DB object (Products):", pool); // Verify DB object
         const { search, category, sort } = req.query;
         let query = 'SELECT * FROM products WHERE 1=1';
         const params = [];
@@ -22,7 +23,8 @@ exports.getAllProducts = async (req, res) => {
         const [products] = await pool.query(query, params);
         res.json(products);
     } catch (err) {
-        res.status(500).json({ error: 'Server error' });
+        console.error("❌ PRODUCTS QUERY ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
 };
 
@@ -32,7 +34,8 @@ exports.getProductById = async (req, res) => {
         if (products.length === 0) return res.status(404).json({ error: 'Product not found' });
         res.json(products[0]);
     } catch (err) {
-        res.status(500).json({ error: 'Server error' });
+        console.error("❌ GET PRODUCT BY ID ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
 };
 
@@ -46,7 +49,8 @@ exports.createProduct = async (req, res) => {
 
         res.status(201).json({ id: result.insertId, ...req.body });
     } catch (err) {
-        res.status(500).json({ error: 'Server error' });
+        console.error("❌ CREATE PRODUCT ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
 };
 
@@ -61,7 +65,8 @@ exports.updateProduct = async (req, res) => {
         if (result.affectedRows === 0) return res.status(404).json({ error: 'Product not found' });
         res.json({ message: 'Product updated' });
     } catch (err) {
-        res.status(500).json({ error: 'Server error' });
+        console.error("❌ UPDATE PRODUCT ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
 };
 
@@ -71,6 +76,7 @@ exports.deleteProduct = async (req, res) => {
         if (result.affectedRows === 0) return res.status(404).json({ error: 'Product not found' });
         res.json({ message: 'Product deleted successfully' });
     } catch (err) {
-        res.status(500).json({ error: 'Server error' });
+        console.error("❌ DELETE PRODUCT ERROR:", err);
+        res.status(500).json({ error: err.message });
     }
 };

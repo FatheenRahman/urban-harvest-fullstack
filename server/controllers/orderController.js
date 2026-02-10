@@ -61,9 +61,9 @@ exports.createOrder = async (req, res) => {
         res.status(201).json({ message: 'Order placed successfully', orderId });
 
     } catch (err) {
-        await connection.rollback();
-        console.error(err);
-        res.status(500).json({ error: 'Server error' });
+        if (connection) await connection.rollback();
+        console.error("❌ CREATE ORDER ERROR:", err);
+        res.status(500).json({ error: err.message });
     } finally {
         if (connection) connection.release();
     }
