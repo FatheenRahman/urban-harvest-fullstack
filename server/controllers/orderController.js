@@ -24,7 +24,7 @@ exports.createOrder = async (req, res) => {
             }
             const product = products[0];
 
-            if (product.stock_quantity < item.quantity) {
+            if (product.stock < item.quantity) {
                 await connection.rollback();
                 connection.release();
                 return res.status(400).json({ error: `Insufficient stock for ${product.name}` });
@@ -52,7 +52,7 @@ exports.createOrder = async (req, res) => {
                 [orderId, item.productId, item.quantity, item.price]
             );
             await connection.query(
-                'UPDATE products SET stock_quantity = stock_quantity - ? WHERE id = ?',
+                'UPDATE products SET stock = stock - ? WHERE id = ?',
                 [item.quantity, item.productId]
             );
         }
