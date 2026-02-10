@@ -126,7 +126,7 @@ exports.seedDatabase = async (req, res) => {
         }
 
         await connection.commit();
-        res.json({ message: 'Database seeded successfully with Tables and Data!' });
+        res.json({ message: 'Database RE-SEEDED with 9 NEW items! 🚀' });
 
     } catch (err) {
         await connection.rollback();
