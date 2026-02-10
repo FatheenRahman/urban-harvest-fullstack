@@ -26,6 +26,9 @@ app.get("/api/test-db", async (req, res) => {
     }
 });
 
+// ✅ Validation / Seed Route
+app.post("/api/seed-db", require('./controllers/seedController').seedDatabase);
+
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/events', require('./routes/eventRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
