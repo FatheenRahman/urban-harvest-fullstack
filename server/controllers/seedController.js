@@ -85,46 +85,44 @@ exports.seedDatabase = async (req, res) => {
         `);
 
 
-        // 2. Clear Tables (Optional: Be careful in production, but good for "Reset")
-        // await connection.query('SET FOREIGN_KEY_CHECKS = 0');
-        // await connection.query('TRUNCATE TABLE products');
-        // await connection.query('TRUNCATE TABLE events');
-        // await connection.query('SET FOREIGN_KEY_CHECKS = 1');
+        // 2. Clear Tables (Requested "Replace" functionality)
+        await connection.query('SET FOREIGN_KEY_CHECKS = 0');
+        await connection.query('TRUNCATE TABLE products');
+        await connection.query('TRUNCATE TABLE events');
+        await connection.query('SET FOREIGN_KEY_CHECKS = 1');
 
         // 3. Insert Dummy Products
         const products = [
-            ['Quantum Spinach', 'Leaves that exist in multiple states of crispness simultaneously. Rich in dark matter nutrients.', 350.00, 50, 'Vegetables', 'https://images.unsplash.com/photo-1576045057995-568f588f82fb?q=80&w=2000&auto=format&fit=crop'],
-            ['Void Tomato', 'Absorbs light to create the deepest red hue. Tastes like infinite possibilities.', 450.00, 30, 'Vegetables', 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?q=80&w=1000&auto=format&fit=crop'],
-            ['Nebula Berries', 'berries containing swirl of galaxies. Bursts with cosmic flavor.', 3200.00, 15, 'Fruits', 'https://images.unsplash.com/photo-1519999482648-25049ddd37b1?q=80&w=1000&auto=format&fit=crop'],
-            ['Mist-Grown Strawberries', 'Grown in pure mountain mist for delicate texture.', 2500.00, 25, 'Fruits', 'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?q=80&w=1000&auto=format&fit=crop'],
-            ['Vertical Basil', 'Optimized for vertical farming. Grows perfectly straight.', 900.00, 100, 'Herbs', 'https://images.unsplash.com/photo-1618164436241-4473940d1f5c?q=80&w=1000&auto=format&fit=crop'],
-            ['Crystal Lettuce', 'Transparent leaves with a glass-like crunch.', 1200.00, 40, 'Vegetables', 'https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?q=80&w=1000&auto=format&fit=crop'],
-            ['Sun-Kissed Peppers', 'Absorbs 99% of solar radiation for spicy heat.', 1500.00, 60, 'Vegetables', 'https://images.unsplash.com/photo-1563565375-f3fdf5d6c465?q=80&w=1000&auto=format&fit=crop'],
-            ['Heritage Carrots', 'Genetic lineage tracing back to the first domesticated root.', 500.00, 80, 'Vegetables', 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?q=80&w=1000&auto=format&fit=crop'],
-            ['Eco-Kale', 'Carbon-negative greens that clean the air while growing.', 1600.00, 45, 'Vegetables', 'https://images.unsplash.com/photo-1524179091875-bf99a9a6af57?q=80&w=1000&auto=format&fit=crop']
+            ['Quantum Spinach', 'Spinach grown in absolute zero gravity with enhanced iron content.', 45.00, 20, 'Zero-G', 'https://images.unsplash.com/photo-1576045057995-568f588f82fb?auto=format&fit=crop&w=800&q=80'],
+            ['Void Tomato', 'Perfectly spherical tomatoes grown in magnetic suspension fields.', 28.00, 15, 'Zero-G', 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=800&q=80'],
+            ['Nebula Berries', 'Blueberries that absorbed cosmic radiation for extra antioxidants.', 50.00, 10, 'Zero-G', 'https://images.unsplash.com/photo-1498557850523-fd3d118b962e?auto=format&fit=crop&w=800&q=80'],
+            ['Mist-Grown Strawberries', 'Sweet aeroponic strawberries grown without a single grain of soil.', 15.00, 100, 'Hydroponic', 'https://images.unsplash.com/photo-1543158181-e6f9f6712055?auto=format&fit=crop&w=800&q=80'],
+            ['Vertical Basil', 'Genovese basil stacked 50 layers high for maximum efficiency.', 5.00, 200, 'Hydroponic', 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?auto=format&fit=crop&w=800&q=80'],
+            ['Crystal Lettuce', 'Crunchy iceberg lettuce grown in purified mineral water.', 4.50, 150, 'Hydroponic', 'https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?auto=format&fit=crop&w=800&q=80'],
+            ['Sun-Kissed Peppers', 'Organic bell peppers grown in natural sunlight on Colombo rooftops.', 8.00, 60, 'Standard', 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80'],
+            ['Heritage Carrots', 'Purple and orange carrots from heirloom seeds.', 6.00, 80, 'Standard', 'https://images.unsplash.com/photo-1590868309235-ea34bed7bd7f?auto=format&fit=crop&w=800&q=80'],
+            ['Eco-Kale', 'Kale grown using composted organic waste.', 7.50, 55, 'Standard', 'https://images.unsplash.com/photo-1524179091875-bf99a9a6af57?auto=format&fit=crop&w=800&q=80']
         ];
 
         for (const p of products) {
-            // Check if exists
-            const [exists] = await connection.query('SELECT id FROM products WHERE name = ?', [p[0]]);
-            if (exists.length === 0) {
-                await connection.query('INSERT INTO products (name, description, price, stock, category, image_url) VALUES (?, ?, ?, ?, ?, ?)', p);
-            }
+            await connection.query('INSERT INTO products (name, description, price, stock, category, image_url) VALUES (?, ?, ?, ?, ?, ?)', p);
         }
 
         // 4. Insert Dummy Events
         const events = [
-            ['Composting 101', 'Learn the basics of turning waste into black gold.', '2025-06-15 10:00:00', 'Community Garden A', 'Workshop', 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?q=80&w=1000&auto=format&fit=crop'],
-            ['Urban Farming Workshop', 'Master the art of growing food in small spaces.', '2025-07-20 14:00:00', 'Downtown Hub', 'Workshop', 'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?q=80&w=1000&auto=format&fit=crop'],
-            ['Seed Swap Meet', 'Exchange rare seeds with fellow enthusiasts.', '2025-08-05 09:00:00', 'Central Park Pavilion', 'Community', 'https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?q=80&w=1000&auto=format&fit=crop'],
-            ['Rooftop Garden Tour', 'Explore the citys most innovative sky gardens.', '2025-09-10 16:00:00', 'Skyline Tower', 'Tour', 'https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=1000&auto=format&fit=crop']
+            ['Anti-Gravity Farming Workshop', 'Learn the basics of farming in zero gravity environments.', '2026-03-15 10:00:00', 'Viharamahadevi Park, Colombo 07', 'Workshop', 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80'],
+            ['Zero-G Taste Testing', 'Experience the unique flavors of space-grown produce.', '2026-03-20 18:00:00', 'Colombo Lotus Tower', 'Social', 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=800&q=80'],
+            ['Future of Food Seminar', 'Experts discuss the next 50 years of agricultural technology.', '2026-04-01 09:00:00', 'BMICH, Colombo 07', 'Seminar', 'https://images.unsplash.com/photo-1544531586-fde5298cdd40?auto=format&fit=crop&w=800&q=80'],
+            ['Hydroponics for Beginners', 'Start your own water-based garden at home.', '2026-03-10 14:00:00', 'Independence Square, Colombo 07', 'Workshop', 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?auto=format&fit=crop&w=800&q=80'],
+            ['Vertical Farm Tour', 'Guided tour of the citys largest vertical farming complex.', '2026-03-25 10:00:00', 'World Trade Center, Colombo 01', 'Tour', 'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=800&q=80'],
+            ['Nutrient Solution Masterclass', 'Perfecting your hydroponic nutrient mixes.', '2026-04-05 13:00:00', 'University of Colombo, Colombo 03', 'Workshop', 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=800&q=80'],
+            ['Rooftop Harvest Festival', 'Celebrate the season\'s bounty with music and food.', '2026-04-10 16:00:00', 'Cinnamon Grand Rooftop, Colombo 03', 'Festival', 'https://images.unsplash.com/photo-1519750157634-b6d493a0f77c?auto=format&fit=crop&w=800&q=80'],
+            ['Composting Workshop', 'Turn organic waste into rich soil for your garden.', '2026-03-12 11:00:00', 'Diyatha Uyana, Battaramulla', 'Workshop', 'https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&w=800&q=80'],
+            ['Urban Beekeeping', 'The vital role of bees in urban agriculture.', '2026-03-18 09:00:00', 'Beddagana Wetland Park, Kotte', 'Workshop', 'https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?auto=format&fit=crop&w=800&q=80']
         ];
 
         for (const e of events) {
-            const [exists] = await connection.query('SELECT id FROM events WHERE title = ?', [e[0]]);
-            if (exists.length === 0) {
-                await connection.query('INSERT INTO events (title, description, date, location, category, image_url) VALUES (?, ?, ?, ?, ?, ?)', e);
-            }
+            await connection.query('INSERT INTO events (title, description, date, location, category, image_url) VALUES (?, ?, ?, ?, ?, ?)', e);
         }
 
         await connection.commit();
